@@ -42,6 +42,16 @@ target_link_libraries(towr_ros
   ${catkin_LIBRARIES}
 )
 
+add_executable(towr_ros_quad
+  src/towr_ros_quad.cc
+)
+add_dependencies(towr_ros_quad
+  ${PROJECT_NAME}_gencpp
+)
+target_link_libraries(towr_ros_quad
+  ${catkin_LIBRARIES}
+)
+
 
 ## Keyboard interfaces (ncurses)
 find_package(Curses REQUIRED)

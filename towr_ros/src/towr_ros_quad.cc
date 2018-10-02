@@ -36,7 +36,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <xpp_msgs/TerrainInfo.h>
 
 #include <towr/initialization/quadruped_gait_generator.h>
-#include <towr/models/examples/hyq_model.h>
+#include <towr/models/examples/quad_model.h>
 #include <towr/terrain/examples/height_map_examples.h>
 #include <towr/variables/euler_converter.h>
 
@@ -60,19 +60,19 @@ TowrRos::TowrRos ()
   robot_parameters_pub_  = n.advertise<xpp_msgs::RobotParameters>
                                     (xpp_msgs::robot_parameters, 1);
 
-  model_.dynamic_model_   = std::make_shared<HyqDynamicModel>();
-  model_.kinematic_model_ = std::make_shared<HyqKinematicModel>();
+  model_.dynamic_model_   = std::make_shared<QuadDynamicModel>();
+  model_.kinematic_model_ = std::make_shared<QuadKinematicModel>();
   gait_                   = std::make_shared<QuadrupedGaitGenerator>();
 
   // initial state
   BaseState b;
-  b.lin.at(kPos).z() = 0.58;
+  b.lin.at(kPos).z() = 1.53;
   std::vector<Eigen::Vector3d> ee_pos(model_.kinematic_model_->GetNumberOfEndeffectors());
 
-  ee_pos.at(LF) <<  0.31,  0.29, 0.0;
-  ee_pos.at(RF) <<  0.31, -0.29, 0.0;
-  ee_pos.at(LH) << -0.31,  0.29, 0.0;
-  ee_pos.at(RH) << -0.31, -0.29, 0.0;
+  ee_pos.at(LF) << 0.8062,0.68,0.0;
+  ee_pos.at(RF) << 0.8062,-0.68,0;
+  ee_pos.at(LH) << -0.8062,0.68,0;
+  ee_pos.at(RH) << -0.8062,-0.68,0;
 
   towr_.SetInitialState(b, ee_pos);
 

@@ -37,6 +37,7 @@ add_library(${PROJECT_NAME} SHARED
   # models
   src/anymal_model.cc
   src/hyq_model.cc
+  src/quad_model.cc
   src/biped_model.cc
   src/monoped_model.cc
   src/dynamic_model.cc
@@ -64,11 +65,11 @@ add_library(${PROJECT_NAME} SHARED
   src/height_map_examples.cc
   src/height_map.cc
 )
-target_link_libraries(${PROJECT_NAME} 
-  PUBLIC 
+target_link_libraries(${PROJECT_NAME}
+  PUBLIC
     ifopt::ifopt_core
 )
-target_include_directories(${PROJECT_NAME} 
+target_include_directories(${PROJECT_NAME}
   PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
@@ -80,12 +81,12 @@ target_include_directories(${PROJECT_NAME}
 #############
 enable_testing()
 # example problem solved with IPOPT
-add_executable(${PROJECT_NAME}-example 
+add_executable(${PROJECT_NAME}-example
   test/hopper_example.cc
 )
-target_link_libraries(${PROJECT_NAME}-example  
+target_link_libraries(${PROJECT_NAME}-example
   PRIVATE
-    ${PROJECT_NAME} 
+    ${PROJECT_NAME}
     ifopt::ifopt_ipopt
 )
 add_test(${PROJECT_NAME}-example ${PROJECT_NAME}-example)
@@ -137,7 +138,7 @@ write_basic_package_version_file(
 )
 # install the two files in a place where cmake looks for them
 install(
-  FILES 
+  FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/cmake/towr-config.cmake"   # self-written
     ${version_file}                                         # generated
   DESTINATION ${config_package_location}
