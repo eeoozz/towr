@@ -35,7 +35,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <towr_ros/TowrCommand.h>
 #include <towr_ros/topic_names.h>
-#include <towr/terrain/examples/height_map_examples.h>
+#include <towr/terrain/examples/height_map_quad.h>
 
 
 namespace towr {
@@ -302,4 +302,3 @@ int main(int argc, char *argv[])
 
   return 1;
 }
-

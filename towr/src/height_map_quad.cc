@@ -81,7 +81,7 @@ Obstacles::GetHeight(double x, double y) const
   if ((x> first_obs_dist_) && (x< first_obs_dist_+first_obs_length_) && (y> first_obs_va_) && (y< first_obs_va_+first_obs_width_))
     h = first_obs_height_;
 
-  if ((x> second_obs_dist_) && (x< second_obs_dist+second_obs_length_) && (y> second_obs_va_) && (y< second_obs_va_+second_obs_width_))
+  if ((x> second_obs_dist_) && (x< second_obs_dist_+second_obs_length_) && (y> second_obs_va_) && (y< second_obs_va_+second_obs_width_))
     h = second_obs_height_;
 
   return h;

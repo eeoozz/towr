@@ -74,17 +74,17 @@ class Obstacles : public HeightMap {
 public:
   virtual double GetHeight(double x, double y) const override;
 private:
-  double first_obs_dist_ = 1.5;
-  double first_obs_width_ = 0.4;
+  double first_obs_dist_ = 2;
+  double first_obs_width_ = 3.0;
   double first_obs_height_ = 0.1;
   double first_obs_length_ = 0.1;
-  double first_obs_va_ = -0.8; //the leftmost edge of the block's variation from y = 0;
+  double first_obs_va_ = -0.3; //the leftmost edge of the block's variation from y = 0;
 
-  double second_obs_dist_ = 2;
-  double second_obs_width_ = 0.4;
+  double second_obs_dist_ = 3;
+  double second_obs_width_ = 3.0;
   double second_obs_height_ = 0.1;
   double second_obs_length_ = 0.1;
-  double second_obs_va_ = 0.8;
+  double second_obs_va_ = 0.3;
 };
 
 class NarrowAisle : public HeightMap  {
@@ -129,9 +129,9 @@ public:
   virtual double GetHeightDerivWrtX(double x, double y) const override;
 
 private:
-  const double slope_start_ = 2;
-  const double up_length_   = 1.732;
-  const double height_center_ = 1;
+  const double slope_start_ = 3.5;
+  const double up_length_   = 3.464;
+  const double height_center_ = 2;
 
   const double slope_end_ = slope_start_+up_length_;
   const double slope_ = height_center_/up_length_;
