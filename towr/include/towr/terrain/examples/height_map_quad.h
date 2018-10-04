@@ -1,7 +1,7 @@
 
 
-#ifndef TOWR_TOWR_ROS_INCLUDE_TOWR_ROS_HEIGHT_MAP_EXAMPLES_H_
-#define TOWR_TOWR_ROS_INCLUDE_TOWR_ROS_HEIGHT_MAP_EXAMPLES_H_
+#ifndef TOWR_TOWR_ROS_INCLUDE_TOWR_ROS_HEIGHT_MAP_QUAD_H_
+#define TOWR_TOWR_ROS_INCLUDE_TOWR_ROS_HEIGHT_MAP_QUAD_H_
 
 #include <towr/terrain/height_map.h>
 
@@ -16,7 +16,7 @@ enum TerrainID { FlatID=0,
                  DoorID,
                  StairsID,
                  ObstaclesID,
-                 NarrowPaID, //1.25*width of the robot
+                 NarrowAisleID, //1.25*width of the robot
                  GapID, //30 cm apart
                  SlopeID, //30 degree
                  K_TERRAIN_COUNT };
@@ -39,34 +39,64 @@ private:
   double height_; // [m]
 };
 
-
-class Block : public HeightMap {
+class UnmodifiedGround : public HeightMap  {
 public:
-  virtual double GetHeight(double x, double y)  const override;
-  virtual double GetHeightDerivWrtX(double x, double y) const override;
-
+  virtual double GetHeight(double x, double y) const override;
 private:
-  double block_start = 0.7;
-  double length_     = 3.5;
-  double height_     = 0.5; // [m]
-
-  double eps_ = 0.03; // approximate as slope
-  const double slope_ = height_/eps_;
+  double height_ = 0;
 };
 
+class Door : public HeightMap {
+public:
+  virtual double GetHeight(double x, double y) const override;
+  virtual double GetHeightDerivWrtY(double x, double y) const override;
+private:
+  double width_ = 1.6;
+  double length_ = 0.2;
+  double dist_from_start = 3;
+  double slope_ = 20;
+
+  double hw = width_/2;
+};
 
 class Stairs : public HeightMap {
 public:
   virtual double GetHeight(double x, double y) const override;
 
 private:
-  double first_step_start_  = 1.0;
-  double first_step_width_  = 0.4;
-  double height_first_step  = 0.2;
-  double height_second_step = 0.4;
-  double width_top = 1.0;
+  double first_step_start_ = 2.5;
+  double step_width_ = 0.2;
+  double step_height_ = 0.2;
+  int step_num_ = 5;
 };
 
+class Obstacles : public HeightMap {
+public:
+  virtual double GetHeight(double x, double y) const override;
+private:
+  double first_obs_dist_ = 1.5;
+  double first_obs_width_ = 0.4;
+  double first_obs_height_ = 0.1;
+  double first_obs_length_ = 0.1;
+  double first_obs_va_ = -0.8; //the leftmost edge of the block's variation from y = 0;
+
+  double second_obs_dist_ = 2;
+  double second_obs_width_ = 0.4;
+  double second_obs_height_ = 0.1;
+  double second_obs_length_ = 0.1;
+  double second_obs_va_ = 0.8;
+};
+
+class NarrowAisle : public HeightMap  {
+public:
+  virtual double GetHeight(double x, double y) const override;
+  virtual double GetHeightDerivWrtY(double x, double y) const override;
+private:
+  double aisle_width_ = 1.5;
+  double slope_ = 20; //treat the wall as slope at both sides, 0.1m discrepancy at 2m height
+
+  double hw = aisle_width_/2.0;
+};
 
 class Gap : public HeightMap {
 public:
@@ -75,8 +105,8 @@ public:
   virtual double GetHeightDerivWrtXX(double x, double y) const override;
 
 private:
-  const double gap_start_ = 1.0;
-  const double w = 0.6;
+  const double gap_start_ = 2.5;
+  const double w = 0.3;
   const double h = 1.5;
 
   const double slope_ = h/w;
@@ -93,55 +123,20 @@ private:
   const double c = -(h*(w - 2*xc)*(w + 2*xc))/(w*w);
 };
 
-
 class Slope : public HeightMap {
 public:
   virtual double GetHeight(double x, double y) const override;
   virtual double GetHeightDerivWrtX(double x, double y) const override;
 
 private:
-  const double slope_start_ = 1.0;
-  const double up_length_   = 1.0;
-  const double down_length_ = 1.0;
-  const double height_center = 0.7;
+  const double slope_start_ = 2;
+  const double up_length_   = 1.732;
+  const double height_center_ = 1;
 
-  const double x_down_start_ = slope_start_+up_length_;
-  const double x_flat_start_ = x_down_start_ + down_length_;
-  const double slope_ = height_center/up_length_;
+  const double slope_end_ = slope_start_+up_length_;
+  const double slope_ = height_center_/up_length_;
 };
-
-
-class Chimney : public HeightMap {
-public:
-  virtual double GetHeight(double x, double y) const override;
-  virtual double GetHeightDerivWrtY(double x, double y) const override;
-
-private:
-  const double x_start_ = 1.0;
-  const double length_  = 1.5;
-  const double y_start_ = 0.5; // distance to start of slope from center at z=0
-  const double slope_   = 3.0;
-
-  const double x_end_ = x_start_+length_;
-};
-
-
-class ChimneyLR : public HeightMap {
-public:
-  virtual double GetHeight(double x, double y) const override;
-  virtual double GetHeightDerivWrtY(double x, double y) const override;
-
-private:
-  const double x_start_ = 0.5;
-  const double length_  = 1.0;
-  const double y_start_ = 0.5; // distance to start of slope from center at z=0
-  const double slope_   = 2;
-
-  const double x_end1_ = x_start_+length_;
-  const double x_end2_ = x_start_+2*length_;
-};
-
 
 } /* namespace towr */
 
-#endif /* TOWR_TOWR_ROS_INCLUDE_TOWR_ROS_HEIGHT_MAP_EXAMPLES_H_ */
+#endif /* TOWR_TOWR_ROS_INCLUDE_TOWR_ROS_HEIGHT_MAP_QUAD_H_ */

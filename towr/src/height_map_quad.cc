@@ -8,12 +8,12 @@ HeightMapFactory::MakeTerrain (TerrainID type)
 {
   switch (type) {
     case FlatID:      return std::make_shared<FlatGround>(); break;
-    case BlockID:     return std::make_shared<Block>(); break;
+    case DoorID:     return std::make_shared<Door>(); break;
     case StairsID:    return std::make_shared<Stairs>(); break;
+    case ObstaclesID:   return std::make_shared<Obstacles>(); break;
+    case NarrowAisleID: return std::make_shared<NarrowAisle>(); break;
     case GapID:       return std::make_shared<Gap>(); break;
     case SlopeID:     return std::make_shared<Slope>(); break;
-    case ChimneyID:   return std::make_shared<Chimney>(); break;
-    case ChimneyLRID: return std::make_shared<ChimneyLR>(); break;
     default: assert(false); break;
   }
 }
@@ -23,33 +23,40 @@ FlatGround::FlatGround(double height)
   height_ = height;
 }
 
+//UNMODIFIED
 double
-Block::GetHeight (double x, double y) const
+UnmodifiedGround::GetHeight(double x, double y) const
+{
+  return 0.0;
+}
+
+//DOOR
+double
+Door::GetHeight(double x, double y) const
 {
   double h = 0.0;
 
-  // very steep ramp leading up to block
-  if (block_start <= x && x <=block_start+eps_)
-    h = slope_*(x-block_start);
+  if ((y< -hw) && (x> dist_from_start) && (x< dist_from_start+length_))
+    h = (-hw - y) * slope_;
 
-  if (block_start+eps_ <= x && x <= block_start+length_)
-    h = height_;
+  if ((y> hw) && (x> dist_from_start) && (x< dist_from_start+length_))
+    h = (y-hw) * slope_;
 
   return h;
 }
 
-double
-Block::GetHeightDerivWrtX (double x, double y) const
+double Door::GetHeightDerivWrtY(double x, double y) const
 {
-  double dhdx = 0.0;
+  double dhdy = 0.0;
 
-  // very steep ramp leading up to block
-  if (block_start <= x && x <=block_start+eps_)
-    dhdx = slope_;
+  if ((y< -hw) && (x> dist_from_start) && (x< dist_from_start+length_))
+    dhdy = -slope_;
 
-  return dhdx;
+  if ((y> hw) && (x> dist_from_start) && (x< dist_from_start+length_))
+    dhdy = slope_;
+
+  return dhdy;
 }
-
 
 // STAIRS
 double
@@ -57,18 +64,57 @@ Stairs::GetHeight (double x, double y) const
 {
   double h = 0.0;
 
-  if (x>=first_step_start_)
-    h = height_first_step;
-
-  if (x>=first_step_start_+first_step_width_)
-    h = height_second_step;
-
-  if (x>=first_step_start_+first_step_width_+width_top)
-    h = 0.0;
+  for (int count=0; count<step_num_; count++) {
+    if (x>= (count*step_width_+first_step_start_))
+      h = step_height_*(count+1);
+  }
 
   return h;
 }
 
+//OBSTACLES
+double
+Obstacles::GetHeight(double x, double y) const
+{
+  double h = 0.0;
+
+  if ((x> first_obs_dist_) && (x< first_obs_dist_+first_obs_length_) && (y> first_obs_va_) && (y< first_obs_va_+first_obs_width_))
+    h = first_obs_height_;
+
+  if ((x> second_obs_dist_) && (x< second_obs_dist+second_obs_length_) && (y> second_obs_va_) && (y< second_obs_va_+second_obs_width_))
+    h = second_obs_height_;
+
+  return h;
+}
+
+//AISLE
+double
+NarrowAisle::GetHeight (double x, double y) const
+{
+  double h = 0.0;
+
+  if (y< -hw)
+    h = (-hw - y) * slope_;
+
+  if (y> hw)
+    h = (y-hw) * slope_;
+
+  return h;
+}
+
+double
+NarrowAisle::GetHeightDerivWrtY (double x, double y) const
+{
+  double dhdy = 0.0;
+
+  if (y<-hw)
+    dhdy = -slope_;
+
+  if (y>hw)
+    dhdy = slope_;
+
+  return dhdy;
+}
 
 // GAP
 double
@@ -105,23 +151,18 @@ Gap::GetHeightDerivWrtXX (double x, double y) const
   return dzdxx;
 }
 
-
 // SLOPE
 double
 Slope::GetHeight (double x, double y) const
 {
   double z = 0.0;
-  if (x >= slope_start_)
+  if ((x >= slope_start_) && (x < slope_end_))
     z = slope_*(x-slope_start_);
 
   // going back down
-  if (x >= x_down_start_) {
-    z = height_center - slope_*(x-x_down_start_);
+  if (x >= slope_end_) {
+    z = height_center_;
   }
-
-  // back on flat ground
-  if (x >= x_flat_start_)
-    z = 0.0;
 
   return z;
 }
@@ -130,70 +171,14 @@ double
 Slope::GetHeightDerivWrtX (double x, double y) const
 {
   double dzdx = 0.0;
-  if (x >= slope_start_)
+  if ((x >= slope_start_) && (x < slope_end_))
     dzdx = slope_;
 
-  if (x >= x_down_start_)
-    dzdx = -slope_;
-
-  if (x >= x_flat_start_)
+  if (x >= slope_end_)
     dzdx = 0.0;
 
   return dzdx;
 }
 
-
-// Chimney
-double
-Chimney::GetHeight (double x, double y) const
-{
-  double z = 0.0;
-
-  if (x_start_<=x && x<=x_end_)
-    z = slope_*(y-y_start_);
-
-  return z;
-}
-
-double
-Chimney::GetHeightDerivWrtY (double x, double y) const
-{
-  double dzdy = 0.0;
-
-  if (x_start_<= x && x<= x_end_)
-    dzdy = slope_;
-
-  return dzdy;
-}
-
-
-// Chimney LR
-double
-ChimneyLR::GetHeight (double x, double y) const
-{
-  double z = 0.0;
-
-  if (x_start_<=x && x<=x_end1_)
-    z = slope_*(y-y_start_);
-
-  if (x_end1_<=x && x<=x_end2_)
-    z = -slope_*(y+y_start_);
-
-  return z;
-}
-
-double
-ChimneyLR::GetHeightDerivWrtY (double x, double y) const
-{
-  double dzdy = 0.0;
-
-  if (x_start_ <= x && x <= x_end1_)
-    dzdy = slope_;
-
-  if (x_end1_<=x && x<=x_end2_)
-    dzdy = -slope_;
-
-  return dzdy;
-}
 
 } /* namespace towr */
