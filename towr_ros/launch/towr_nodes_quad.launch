@@ -32,5 +32,6 @@
     type="towr_ros_quad" 
     output="screen">
   </node>
+  <!-- launch-prefix="xterm -e gdb -args" -->
     
 </launch>

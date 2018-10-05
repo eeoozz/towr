@@ -14,7 +14,7 @@ HeightMapFactory::MakeTerrain (TerrainID type)
     case NarrowAisleID: return std::make_shared<NarrowAisle>(); break;
     case GapID:       return std::make_shared<Gap>(); break;
     case SlopeID:     return std::make_shared<Slope>(); break;
-    default: assert(false); break;
+    default: return std::make_shared<FlatGround>(); break;
   }
 }
 
