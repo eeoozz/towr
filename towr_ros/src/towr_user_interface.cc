@@ -62,7 +62,7 @@ TowrUserInterface::TowrUserInterface ()
 
   // publish goal zero initially
   goal_geom_.lin.p_.setZero();
-  goal_geom_.lin.p_ << 1.0, 0.0, 0.58;
+  goal_geom_.lin.p_ << 2.5, 0.0, 1.53;
   goal_geom_.ang.p_ << 0.0, 0.0, 0.0; // roll, pitch, yaw angle applied Z->Y'->X''
 
   terrain_id_    = 0;
