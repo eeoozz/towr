@@ -76,14 +76,14 @@ public:
 private:
   double first_obs_dist_ = 2;
   double first_obs_width_ = 3.0;
-  double first_obs_height_ = 0.1;
-  double first_obs_length_ = 0.1;
+  double first_obs_height_ = 0.25;
+  double first_obs_length_ = 0.3;
   double first_obs_va_ = -0.3; //the leftmost edge of the block's variation from y = 0;
 
   double second_obs_dist_ = 3;
   double second_obs_width_ = 3.0;
-  double second_obs_height_ = 0.1;
-  double second_obs_length_ = 0.1;
+  double second_obs_height_ = 0.25;
+  double second_obs_length_ = 0.3;
   double second_obs_va_ = 0.3;
 };
 
@@ -105,8 +105,8 @@ public:
   virtual double GetHeightDerivWrtXX(double x, double y) const override;
 
 private:
-  const double gap_start_ = 2.5;
-  const double w = 0.3;
+  const double gap_start_ = 2.4;//2.5
+  const double w = 0.5;//0.3
   const double h = 1.5;
 
   const double slope_ = h/w;

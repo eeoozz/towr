@@ -149,14 +149,14 @@ RvizTerrainBuilder::BuildTerrainObstacles() const
 {
   double first_obs_dist_ = 2;
   double first_obs_width_ = 3.0;
-  double first_obs_height_ = 0.1;
-  double first_obs_length_ = 0.1;
+  double first_obs_height_ = 0.25;
+  double first_obs_length_ = 0.3;
   double first_obs_va_ = -0.3; //the leftmost edge of the block's variation from y = 0;
 
   double second_obs_dist_ = 3;
   double second_obs_width_ = 3.0;
-  double second_obs_height_ = 0.1;
-  double second_obs_length_ = 0.1;
+  double second_obs_height_ = 0.25;
+  double second_obs_length_ = 0.3;
   double second_obs_va_ = 0.3;
 
   MarkerArray msg;
@@ -237,11 +237,11 @@ RvizTerrainBuilder::BuildTerrainGap() const
   }
 
   //current blocks
-  Vector3d size1(6- 0.5*w,area_width,3);
-  Vector3d center1(-0.5+ 0.25*w, 0.0, -1.5-eps_);
+  Vector3d size1(5,area_width,3);
+  Vector3d center1(0.0, 0.0, -1.5-eps_);
   msg.markers.push_back(BuildTerrainBlock(center1, size1));
 
-  Vector3d center2(5.8+ 0.25*w, 0.0, -1.5-eps_);
+  Vector3d center2(5.3, 0.0, -1.5-eps_);
   msg.markers.push_back(BuildTerrainBlock(center2, size1));
 
   return msg;

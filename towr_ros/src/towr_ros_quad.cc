@@ -66,13 +66,13 @@ TowrRos::TowrRos ()
 
   // initial state
   BaseState b;
-  b.lin.at(kPos).z() = 1.53;
+  b.lin.at(kPos).z() = 1.536;
   std::vector<Eigen::Vector3d> ee_pos(model_.kinematic_model_->GetNumberOfEndeffectors());
 
-  ee_pos.at(LF) << 0.8062,0.68,0.0;
-  ee_pos.at(RF) << 0.8062,-0.68,0;
-  ee_pos.at(LH) << -0.8062,0.68,0;
-  ee_pos.at(RH) << -0.8062,-0.68,0;
+  ee_pos.at(LF) << 0.806188,0.68,0.0;
+  ee_pos.at(RF) << 0.806188,-0.68,0;
+  ee_pos.at(LH) << -0.806188,0.68,0;
+  ee_pos.at(RH) << -0.806188,-0.68,0;
 
   towr_.SetInitialState(b, ee_pos);
 

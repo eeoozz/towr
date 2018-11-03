@@ -34,9 +34,9 @@ namespace towr {
 
 QuadKinematicModel::QuadKinematicModel () : KinematicModel(4)
 {
-  const double x_nominal_b = 0.93;
-  const double y_nominal_b = 0.65;
-  const double z_nominal_b = -1.53;
+  const double x_nominal_b = 0.806188;
+  const double y_nominal_b = 0.68;
+  const double z_nominal_b = -1.536;
 
   nominal_stance_.at(LF) <<  x_nominal_b,   y_nominal_b, z_nominal_b;
   nominal_stance_.at(RF) <<  x_nominal_b,  -y_nominal_b, z_nominal_b;
@@ -48,7 +48,7 @@ QuadKinematicModel::QuadKinematicModel () : KinematicModel(4)
   nominal_stance_.at(LH) << -y_nominal_b, -x_nominal_b, z_nominal_b;
   nominal_stance_.at(RH) << y_nominal_b,  -x_nominal_b, z_nominal_b;*/
 
-  max_dev_from_nominal_ << 0.4, 0.35, 0.15;
+  max_dev_from_nominal_ << 0.4, 0.35, 0.25;
 }
 
 } /* namespace towr */
