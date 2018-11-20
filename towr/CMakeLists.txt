@@ -38,6 +38,7 @@ add_library(${PROJECT_NAME} SHARED
   src/anymal_model.cc
   src/hyq_model.cc
   src/quad_model.cc
+  src/centauro_model.cc
   src/biped_model.cc
   src/monoped_model.cc
   src/dynamic_model.cc
