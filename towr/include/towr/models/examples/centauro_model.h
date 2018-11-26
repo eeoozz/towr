@@ -43,7 +43,7 @@ public:
 
 class CentauroDynamicModel : public CentroidalModel {
 public:
-  CentauroDynamicModel() : CentroidalModel(90.784,
+  CentauroDynamicModel() : CentroidalModel(93.055,
                       4.26, 8.97, 9.88, -0.0063, 0.193, 0.0126,
                       4) {}
 };

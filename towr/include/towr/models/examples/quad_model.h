@@ -43,7 +43,7 @@ public:
 
 class QuadDynamicModel : public CentroidalModel {
 public:
-  QuadDynamicModel() : CentroidalModel(83,
+  QuadDynamicModel() : CentroidalModel(93,
                       4.26, 8.97, 9.88, -0.0063, 0.193, 0.0126,
                       4) {}
 };
